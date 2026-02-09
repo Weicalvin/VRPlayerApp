@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Force Build APK
 on: [push, workflow_dispatch]
 
 jobs:
@@ -8,20 +8,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: set up JDK 17
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Build with Gradle
+      - name: Build APK (Force)
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug --stacktrace
+          ./gradlew assembleDebug --no-daemon
 
-      - name: Upload APK
+      - name: Find and Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: VRPlayer-APK
-          path: "**/build/outputs/apk/debug/*.apk"
-          
+          name: VR-Player-App
+          path: "**/*.apk"
+
