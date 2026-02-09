@@ -5,24 +5,22 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Java
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
-
-      - name: Fix Permissions
-        run: chmod +x gradlew
-
-      - name: Run Build
-        # 這個指令會強制執行，就算結構不完整也會嘗試報錯給我們看
-        run: ./gradlew assembleDebug --info
-
-      - name: Upload Result
+          
+      - name: Build APK
+        run: |
+          chmod +x gradlew
+          # 告訴編譯器：直接在根目錄編譯，不找 app 資料夾了
+          ./gradlew assembleDebug --info
+          
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: VRPlayer-Package
+          name: VR-Player-Install-File
           path: "**/*.apk"
+
