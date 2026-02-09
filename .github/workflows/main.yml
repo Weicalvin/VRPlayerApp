@@ -1,4 +1,4 @@
-name: Force Build APK
+name: Super Force Build
 on: [push, workflow_dispatch]
 
 jobs:
@@ -8,20 +8,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Build APK (Force)
-        run: |
-          chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon
+      - name: Fix Permissions
+        run: chmod +x gradlew
 
-      - name: Find and Upload APK
+      - name: Run Build
+        # 這個指令會強制執行，就算結構不完整也會嘗試報錯給我們看
+        run: ./gradlew assembleDebug --info
+
+      - name: Upload Result
         uses: actions/upload-artifact@v4
         with:
-          name: VR-Player-App
+          name: VRPlayer-Package
           path: "**/*.apk"
-
